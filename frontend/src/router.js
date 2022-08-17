@@ -1,6 +1,7 @@
+
 import { createRouter, createWebHistory } from "vue-router";
-import Login from "./pages/Connection.vue";
-import Signup from "./pages/Connection.vue";
+import Login from "./pages/Login.vue";
+import Signup from "./pages/Signup.vue";
 
 
 
