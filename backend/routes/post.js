@@ -1,17 +1,20 @@
-//Modules et routes posts
-const express = require('express');
-const router = express.Router();
+// Global imports
+const express = require('express')
+const router = express.Router()
+// Middlewares
+const auth = require('../middleware/auth')
+const multer = require('../middleware/multer-config')
+// Controllers
+const postController = require('../controllers/post')
 
-const auth = require('../middleware/auth');
-const multer = require('../middleware/multer-config');
-const postCtrl = require('../controllers/post');
+// Setup
+router.post('/', auth, multer, postController.createPost)
+router.get('/:id', auth, postController.readPost)
+router.get('/', auth, postController.readPosts)
+router.put('/:id', auth, multer, postController.updatePost)
+router.delete('/:id', auth, postController.deletePost)
+router.put('/:id/like', auth, postController.likePost)
+router.put('/:id/dislike', auth, postController.dislikePost)
 
-router.get('/', auth, postCtrl.getAllPost);
-router.post('/', auth, multer, postCtrl.createPost);
-router.get('/:id', auth, postCtrl.getOnePost);
-router.put('/:id', auth, multer, postCtrl.modifyPost);
-router.delete('/:id', auth, postCtrl.deletePost);
-router.post('/:id/like', auth, postCtrl.likePost);
-
-
-module.exports = router;
+// Export
+module.exports = router

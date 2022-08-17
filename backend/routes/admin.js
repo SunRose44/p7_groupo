@@ -1,14 +1,16 @@
-// NEW !
+// Global imports
+const express = require('express')
+const router = express.Router()
+// Middlewares
+const auth = require('../middleware/auth')
+const admin = require('../middleware/admin')
+const multer = require('../middleware/multer-config')
+// Controllers
+const adminController = require('../controllers/admin')
 
-const express = require('express');
-const router = express.Router();
+// Setup
+router.delete('/:id', [auth, admin], adminController.deletePost)
+router.put('/:id', [auth, admin], multer, adminController.updatePost)
 
-const auth = require('../middleware/auth');
-const multer = require('../middleware/multer-config');
-const postCtrl = require('../controllers/post');
-
-router.delete('/:id', [auth, admin], postCtrl.deletePost);
-router.put('/:id', [auth, admin], multer, postCtrl.modifyPost);
-
-
-module.exports = router;
+// Export
+module.exports = router

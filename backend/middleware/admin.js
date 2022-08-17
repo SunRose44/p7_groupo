@@ -1,9 +1,8 @@
-// NEW !
+// Export
+module.exports = (request, response, next) => {
+	if (!request.user.roles.includes('administrator')) {
+		return response.status(401).json({ message: 'Vous n\'êtes pas administrateur' })
+	}
 
-module.exports = (req, res, next) => {
-    if (!req.user.isAdmin) {
-
-        return res.status(401).json({ message: "Vous n'êtes pas administrateur" });
-    }
-    next();
-};
+	next()
+}

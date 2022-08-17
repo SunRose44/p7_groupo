@@ -1,15 +1,15 @@
-//Modules 
-const mongoose = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
+// Global imports
+const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator')
 
-// Shema Users
+// Setup
 const userSchema = mongoose.Schema({
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    // NEW !
-    isAdmin: { Boolean },
-});
+	email: { type: String, required: true, unique: true },
+	password: { type: String, required: true },
+	roles: { type: Array, default: ['user'] }
+})
 
-userSchema.plugin(uniqueValidator);
+userSchema.plugin(uniqueValidator)
 
-module.exports = mongoose.model('User', userSchema);
+// Export
+module.exports = mongoose.model('User', userSchema)
