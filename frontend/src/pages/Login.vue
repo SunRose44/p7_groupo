@@ -1,79 +1,60 @@
-
 <template>
-
-<div class="row">
-  <div class="col-md-6 offset-md-3">
-<div>
-  <div class="formulaire">
-    <h3>Login </h3>
-    <hr/>
-    </div>
-  <form @submit.prevent="onLogin()">
-    <div class="form-group">
-      <label> Email </label>
-      <input type ="text" class="form-control"  v-model="email"/>
-      <div class="error" v-if="errors.email">{{errors.email}}</div>
-      </div>
-       <div class="form-group">
-      <label> Mot de passe </label>
-      <input type ="password" class="form-control" v-model="password"/>
-       <div class="error" v-if="errors.password">{{errors.password}}</div>
-      </div>
-      <div class ="my-3">
-        <button type="submit" class="btn btn-primary">Connexion</button>
-        </div>
-  </form>
- </div>
- </div>
-</div>
+	<div class="row">
+		<div class="col-md-6 offset-md-3">
+			<div>
+				<div>
+					<h3>Login</h3>
+					<hr/>
+				</div>
+				<form @submit.prevent="onLogin()">
+					<div class="error" v-if="error">{{ error }}</div>
+					<div class="form-group">
+						<label>Email</label>
+						<input type="text" class="form-control" v-model="email"/>
+					</div>
+					<div class="form-group">
+						<label> Mot de passe </label>
+						<input type="password" class="form-control" v-model="password"/>
+					</div>
+					<div class="my-3">
+						<button type="submit" class="btn btn-primary">Connexion</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
-import SignupValidations from "../services/SignupValidations";
+import axios from 'axios'
+import router from "@/router"
 
 export default {
-  data(){
-    return {
-      email:"",
-      password:"",
-      errors: []
-    };
-  },
-  methods: {
-    onLogin(){
-    let validations = new SignupValidations(this.email,this.password,);
-    this.errors = validations.checkValidations();
-    if (this.errors.length) {
-      return false;
-    }
-    },
-    
-
-  },
-};
+	data() {
+		return {
+			email: '',
+			password: '',
+			error: ''
+		}
+	},
+	methods: {
+		async onLogin() {
+			try {
+				const response = await axios.post(
+					'http://localhost:3000/api/auth/login',
+					{
+						email: this.email,
+						password: this.password
+					}
+				)
+				localStorage.setItem('jwt', response.data.token)
+				localStorage.setItem('userID', response.data.userID)
+				router.push('/posts')
+			} catch (error) {
+				console.log(error)
+				this.error = "Email et/ou mot de passe incorrectes"
+			}
+		}
+	}
+}
 </script>
-
-<style >
-body{
-  background-image: url("icon-left-font.png");
-  background-repeat: no-repeat;
-   background-position-x: center;
- 
-
-   background-color: #FFD7D7;
-}
-.btn-primary{
-  background-color: #FD2D01;
-  border: #FD2D01;
-}
-.formulaire{
-margin-top: 20px;
-}
-.col-md-12{
-
-  width: 50%;
-  margin: auto;
-  ;
-}
-
-</style>
