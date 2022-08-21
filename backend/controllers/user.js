@@ -51,7 +51,6 @@ const UserController = {
 module.exports = UserController
 
 
-
 // // Mise en place des modules
 // //Modification de tous les messages des catch error
 // const bcrypt = require('bcrypt');

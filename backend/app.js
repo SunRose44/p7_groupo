@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 // Module sécurités sanitize, helmet et rate limit
 const sanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
+const cors = require('cors')
 const rateLimit = require('express-rate-limit');
 const path = require('path');
 
@@ -21,12 +22,8 @@ mongoose.connect('mongodb+srv://Projet_7_GP:Vpiz80xrzOK@cluster0.kmn41vd.mongodb
 const app = express();
 
 // CORS
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    next();
-});
+app.use(cors())
+app.options('*', cors())
 
 // Helmet
 app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
