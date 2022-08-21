@@ -4,7 +4,7 @@
 <div class="row">
   <div class="col-md-6 offset-md-3">
 <div>
-  <div>
+  <div class="formulaire">
     <h3>Login </h3>
     <hr/>
     </div>
@@ -52,3 +52,28 @@ export default {
   },
 };
 </script>
+
+<style >
+body{
+  background-image: url("icon-left-font.png");
+  background-repeat: no-repeat;
+   background-position-x: center;
+ 
+
+   background-color: #FFD7D7;
+}
+.btn-primary{
+  background-color: #FD2D01;
+  border: #FD2D01;
+}
+.formulaire{
+margin-top: 20px;
+}
+.col-md-12{
+
+  width: 50%;
+  margin: auto;
+  ;
+}
+
+</style>

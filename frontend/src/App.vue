@@ -9,14 +9,22 @@
     </div>
     </div>
   </div>
+  
+
 </template>
 <script>
 import TheNavigation from './components/TheNavigation.vue';
+import ThePosts from './components/ThePosts.vue';
 export default {
-  components: { TheNavigation },
+  components: { TheNavigation,ThePosts },
   name: "App",
   component : {
     TheNavigation,
-  },
-};
+    ThePosts
+}};
+
 </script>
+
+
+
+
