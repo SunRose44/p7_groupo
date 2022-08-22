@@ -1,15 +1,17 @@
 // Global imports
 const mongoose = require('mongoose')
-const uniqueValidator = require('mongoose-unique-validator')
 
 // Setup
-const userSchema = mongoose.Schema({
-	email: { type: String, required: true, unique: true },
-	password: { type: String, required: true },
-	roles: { type: Array, default: ['user'] }
+const postSchema = mongoose.Schema({
+	userID: { type: String, required: true },
+	imageURL: { type: String },
+	content: { type: String, required: true },
+	likes: { type: Number, default: 0 },
+	dislikes: { type: Number, default: 0 },
+	userLikes: [String],
+	userDislikes: [String],
+	creationDate: { type: Date, default: Date.now() }
 })
 
-userSchema.plugin(uniqueValidator)
-
 // Export
-module.exports = mongoose.model('User', userSchema)
+module.exports = mongoose.model('Post', postSchema)

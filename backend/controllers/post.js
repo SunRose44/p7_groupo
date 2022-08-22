@@ -7,10 +7,14 @@ const Post = require('../models/Post')
 const PostController = {
 	createPost: async (request, response) => {
 		try {
+			const imageURL = request.file
+				? `${request.protocol}://${request.get('host')}/images/${request.file.filename}`
+				: null
+
 			await new Post({
 				...request.body,
-				userID: request.auth.userID,
-				imageURL: `${request.protocol}://${request.get('host')}/images/${request.file.filename}`
+				user: request.auth.userID,
+				imageURL
 			}).save()
 
 			return response.status(201).json({ message: 'Objet enregistré !' })
@@ -30,9 +34,12 @@ const PostController = {
 	},
 	readPosts: async (request, response) => {
 		try {
-			const posts = await Post.find()
+			const posts = await Post.find().populate('user')
+			const securePosts = posts.map((post) => ({
+				...post.toObject(), user: { email: post.user.email, userID: post.user._id }
+			}))
 
-			return response.status(200).json(posts)
+			return response.status(200).json(securePosts)
 		} catch {
 			response.status(400).json({ message: 'Requête erronée' })
 		}
@@ -44,18 +51,17 @@ const PostController = {
 				imageURL:
 					request.file
 						? `${request.protocol}://${request.get('host')}/images/${request.file.filename}`
-						: null
+						: (request.body.imageURL || null)
 			}
-
 			const finded = await Post.findById(request.params.id)
 
-			if (finded.userID !== request.auth.userID) {
+			if (finded.user.toString() !== request.auth.userID) {
 				return response.status(401).json({ message: 'Not authorized' })
 			}
 
 			await Post.findByIdAndUpdate(request.params.id, post)
 
-			if (finded.imageURL) {
+			if ((request.file && finded.imageURL) || (!request.body.imageURL && finded.imageURL)) {
 				const filename = finded.imageURL.split('/images/')[1]
 				fs.unlinkSync(`images/${filename}`)
 			}
@@ -68,9 +74,10 @@ const PostController = {
 	},
 	deletePost: async (request, response) => {
 		try {
-			const post = Post.findById(request.params.id)
+			const post = await Post.findById(request.params.id)
 
-			if (post.userID !== request.auth.userID) {
+			if (post.user.toString() !== request.auth.userID) {
+				console.log(request.auth.userID)
 				return response.status(401).json({ message: 'Not authorized' })
 			}
 
@@ -91,11 +98,6 @@ const PostController = {
 		try {
 			const post = await Post.findById(request.params.id)
 			const { userID } = request.auth
-
-			// si l'user a déjà disliké, il peut pas liker
-			if (post.userDislikes.includes(userID)) {
-				return response.status(401).json({ message: 'Not authorized' })
-			}
 
 			if (request.body.isLiked) {
 				// si l'user a déjà liké, il peut pas reliker
@@ -118,43 +120,6 @@ const PostController = {
 
 				post.userLikes.splice(index, 1)
 				post.likes = post.likes - 1
-
-				const updated = await Post.findByIdAndUpdate(request.params.id, post, { new: true })
-
-				return response.status(200).json(updated)
-			}
-		} catch (error) {
-			console.log(error)
-			response.status(400).json({ message: 'Requête erronée' })
-		}
-	},
-	dislikePost: async (request, response) => {
-		try {
-			const post = await Post.findById(request.params.id)
-			const { userID } = request.auth
-
-			if (post.userLikes.includes(userID)) {
-				return response.status(401).json({ message: 'Not authorized' })
-			}
-
-			if (request.body.isDisliked) {
-				if (post.userDislikes.includes(userID)) {
-					return response.status(401).json({ message: 'Not authorized' })
-				}
-				post.userDislikes.push(userID)
-				post.dislikes = post.dislikes + 1
-
-				const updated = await Post.findByIdAndUpdate(request.params.id, post, { new: true })
-
-				return response.status(200).json(updated)
-			} else {
-				if (!post.userDislikes.includes(userID)) {
-					return response.status(401).json({ message: 'Not authorized' })
-				}
-				const index = post.userDislikes.indexOf(userID)
-
-				post.userDislikes.splice(index, 1)
-				post.dislikes = post.dislikes - 1
 
 				const updated = await Post.findByIdAndUpdate(request.params.id, post, { new: true })
 

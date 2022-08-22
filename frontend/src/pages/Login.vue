@@ -49,7 +49,7 @@ export default {
 				)
 				localStorage.setItem('jwt', response.data.token)
 				localStorage.setItem('userID', response.data.userID)
-				router.push('/posts')
+				router.push('/')
 			} catch (error) {
 				console.log(error)
 				this.error = "Email et/ou mot de passe incorrectes"
