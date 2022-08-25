@@ -17,8 +17,9 @@
 					<li class="nav-item">
 						<router-link class="nav-link" to="/signup">S'inscrire</router-link>
 					</li>
-					<li class="nav-item" @click="onLogout()">
-						Se déconnecter
+					<li class="nav-item">
+						<router-link class="nav-link" to="/" @click="onLogout()">
+						Se déconnecter </router-link>
 					</li>
 				</ul>
 			</div>
@@ -42,6 +43,7 @@ export default {
 			try {
 				localStorage.removeItem('jwt')
 				localStorage.removeItem('userID')
+				localStorage.removeItem('roles')
 				router.push('/login')
 			} catch (error) {
 				console.log(error)

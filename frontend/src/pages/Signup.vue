@@ -76,6 +76,7 @@ export default {
 
 				localStorage.setItem('jwt', response.data.token)
 				localStorage.setItem('userID', response.data.userID)
+				localStorage.setItem('roles', response.data.roles)
 				router.push('/')
 			} catch (error) {
 				console.log(error)
@@ -84,3 +85,19 @@ export default {
 	}
 }
 </script>
+
+<style>
+h3 {
+	color: #FD2D01;
+}
+
+ .btn-primary{
+	background-color:#f6724a;
+	border-color:#f6724a ;
+ }
+ .btn:hover{
+	background-color: #FD2D01;
+	border-color: #FD2D01;
+ }
+
+</style>

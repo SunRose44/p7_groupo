@@ -49,6 +49,7 @@ export default {
 				)
 				localStorage.setItem('jwt', response.data.token)
 				localStorage.setItem('userID', response.data.userID)
+				localStorage.setItem('roles', response.data.roles)
 				router.push('/')
 			} catch (error) {
 				console.log(error)
@@ -58,3 +59,23 @@ export default {
 	}
 }
 </script>
+
+<style>
+/* body{
+	
+	background-image: url("icon-left-font.png");
+	background-repeat: no-repeat;
+	background-position-x: center
+	
+	
+	
+} */
+@media only screen and (max-width: 800px) {
+body{
+	background-size: 400px;
+background-position-y: 150px;
+}
+}
+
+</style>
+
