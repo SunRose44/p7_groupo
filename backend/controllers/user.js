@@ -10,14 +10,19 @@ const UserController = {
 		try {
 			const hash = await bcrypt.hash(request.body.password, 10)
 
-			await new User({
+			const user = await new User({
 				email: request.body.email,
 				password: hash
 			}).save()
 
-			return response.status(201).json({ message: 'Utilisateur créé !' })
-		} catch (error) {
-			console.log(error)
+			return response.status(200).json({
+				userID: user._id,
+				token: jwt.sign({ userId: user._id },
+					'RANDOM_TOKEN_SECRET', { expiresIn: '24h' }
+				),
+				roles: user.roles
+			})
+		} catch {
 			return response.status(500).json({ message: 'Requête erronée' })
 		}
 	},
@@ -39,16 +44,17 @@ const UserController = {
 				userID: user._id,
 				token: jwt.sign({ userId: user._id },
 					'RANDOM_TOKEN_SECRET', { expiresIn: '24h' }
-				)
+				),
+				roles: user.roles
 			})
-		} catch (error) {
-			console.log(error)
+		} catch {
 			return response.status(500).json({ message: 'Requête erronée' })
 		}
 	}
 }
 
 module.exports = UserController
+
 
 
 // // Mise en place des modules

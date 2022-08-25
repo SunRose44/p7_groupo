@@ -10,6 +10,6 @@ module.exports = (request, response, next) => {
 		request.auth = { userID: decodedToken.userId }
 		next()
 	} catch {
-		response.status(401).send({ message: 'Accès non autorisé' })
+		response.status(401).json({ message: 'Accès non autorisé' })
 	}
 }

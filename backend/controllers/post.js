@@ -11,15 +11,14 @@ const PostController = {
 				? `${request.protocol}://${request.get('host')}/images/${request.file.filename}`
 				: null
 
-			await new Post({
+			const post = await new Post({
 				...request.body,
 				user: request.auth.userID,
 				imageURL
 			}).save()
 
 			return response.status(201).json({ message: 'Objet enregistré !' })
-		} catch (error) {
-			console.log(error)
+		} catch {
 			return response.status(400).json({ message: 'Requête erronée' })
 		}
 	},
@@ -53,11 +52,7 @@ const PostController = {
 						? `${request.protocol}://${request.get('host')}/images/${request.file.filename}`
 						: (request.body.imageURL || null)
 			}
-			const finded = await Post.findById(request.params.id)
-
-			if (finded.user.toString() !== request.auth.userID) {
-				return response.status(401).json({ message: 'Not authorized' })
-			}
+			const finded = await Post.findById(request.params.id).populate('user')
 
 			await Post.findByIdAndUpdate(request.params.id, post)
 
@@ -67,19 +62,13 @@ const PostController = {
 			}
 
 			return response.status(200).json({ message: 'Objet modifié!' })
-		} catch (error) {
-			console.log(error)
+		} catch {
 			return response.status(400).json({ message: 'Requête erronée' })
 		}
 	},
 	deletePost: async (request, response) => {
 		try {
 			const post = await Post.findById(request.params.id)
-
-			if (post.user.toString() !== request.auth.userID) {
-				console.log(request.auth.userID)
-				return response.status(401).json({ message: 'Not authorized' })
-			}
 
 			await Post.findByIdAndDelete(request.params.id)
 
@@ -89,8 +78,7 @@ const PostController = {
 			}
 
 			return response.status(200).json({ message: 'Objet supprimé !' })
-		} catch (error) {
-			console.log(error)
+		} catch {
 			response.status(400).json({ message: 'Requête erronée' })
 		}
 	},
@@ -125,8 +113,7 @@ const PostController = {
 
 				return response.status(200).json(updated)
 			}
-		} catch (error) {
-			console.log(error)
+		} catch {
 			response.status(400).json({ message: 'Requête erronée' })
 		}
 	}

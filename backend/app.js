@@ -17,7 +17,7 @@ mongoose.connect('mongodb+srv://Projet_7_GP:Vpiz80xrzOK@cluster0.kmn41vd.mongodb
         useUnifiedTopology: true
     })
     .then(() => console.log('Connexion à MongoDB réussie !'))
-    .catch(() => console.log('Connexion à MongoDB échouée !'));
+    .catch((error) => console.log(error));
 
 const app = express();
 
