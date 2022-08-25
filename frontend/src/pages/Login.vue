@@ -51,6 +51,7 @@ export default {
 				localStorage.setItem('userID', response.data.userID)
 				localStorage.setItem('roles', response.data.roles)
 				router.push('/')
+				window.location.reload();
 			} catch (error) {
 				console.log(error)
 				this.error = "Email et/ou mot de passe incorrectes"
@@ -60,22 +61,4 @@ export default {
 }
 </script>
 
-<style>
-/* body{
-	
-	background-image: url("icon-left-font.png");
-	background-repeat: no-repeat;
-	background-position-x: center
-	
-	
-	
-} */
-@media only screen and (max-width: 800px) {
-body{
-	background-size: 400px;
-background-position-y: 150px;
-}
-}
-
-</style>
 

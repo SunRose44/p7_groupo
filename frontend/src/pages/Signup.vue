@@ -85,19 +85,3 @@ export default {
 	}
 }
 </script>
-
-<style>
-h3 {
-	color: #FD2D01;
-}
-
- .btn-primary{
-	background-color:#f6724a;
-	border-color:#f6724a ;
- }
- .btn:hover{
-	background-color: #FD2D01;
-	border-color: #FD2D01;
- }
-
-</style>
