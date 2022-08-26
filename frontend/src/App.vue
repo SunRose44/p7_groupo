@@ -12,12 +12,19 @@
 </template>
 <script>
 import TheNavigation from './components/TheNavigation.vue'
+import { mapMutations } from 'vuex'
 
 export default {
 	components: { TheNavigation },
 	name: 'App',
 	component: {
 		TheNavigation
+	},
+	mounted() {
+		this.initialiseStore()
+	},
+	methods: {
+		...mapMutations(["initialiseStore"])
 	}
 }
 </script>

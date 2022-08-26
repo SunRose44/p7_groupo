@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import router from "@/router";
+import router from "@/router"
+import { mapActions } from "vuex"
 
 export default {
 	data() {
@@ -39,6 +39,7 @@ export default {
 		}
 	},
 	methods: {
+		...mapActions(["signup"]),
 		checkEmail(email) {
 			return /^\w+([-]?\w+)*@\w+([-]?\w+)*(\.\w{2,3})+$/.test(email)
 
@@ -66,18 +67,13 @@ export default {
 					return false
 				}
 
-				const response = await axios.post(
-					'http://localhost:3000/api/auth/signup',
+				await this.signup(
 					{
 						email: this.email,
 						password: this.password
 					}
 				)
-
-				localStorage.setItem('jwt', response.data.token)
-				localStorage.setItem('userID', response.data.userID)
-				localStorage.setItem('roles', response.data.roles)
-				router.push('/')
+				return router.push('/')
 			} catch (error) {
 				console.log(error)
 			}
@@ -85,3 +81,5 @@ export default {
 	}
 }
 </script>
+
+

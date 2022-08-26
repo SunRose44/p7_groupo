@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import router from "@/router"
+import { mapActions } from "vuex"
 
 export default {
 	data() {
@@ -38,27 +38,23 @@ export default {
 		}
 	},
 	methods: {
+    	...mapActions(["login"]),
 		async onLogin() {
 			try {
-				const response = await axios.post(
-					'http://localhost:3000/api/auth/login',
+				await this.login(
 					{
 						email: this.email,
 						password: this.password
 					}
 				)
-				localStorage.setItem('jwt', response.data.token)
-				localStorage.setItem('userID', response.data.userID)
-				localStorage.setItem('roles', response.data.roles)
-				router.push('/')
-				window.location.reload();
+				return router.push('/')
 			} catch (error) {
-				console.log(error)
 				this.error = "Email et/ou mot de passe incorrectes"
 			}
 		}
 	}
 }
 </script>
+
 
 

@@ -1,5 +1,5 @@
 export default function auth(to, from, next) {
-	if (!localStorage.getItem('jwt')) {
+	if (!localStorage.getItem('token')) {
 		next({ name: 'login' })
 	} else {
 		next()
